@@ -103,7 +103,7 @@
 import axios from 'axios';
 import { ref, onMounted } from "vue";
 import VueApexCharts from "vue3-apexcharts";
-import TheSidebar from "../TheSidebar.vue";
+import TheSidebar from "@/components/TheSidebar.vue";
 
 const temperatura = ref(0)
 const minTemp = ref(0)
