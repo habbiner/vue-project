@@ -6,7 +6,7 @@
   ]">
     <div class="flex items-center justify-center w-full py-6">
       <router-link to="home">
-        <img src="../assets/logo.png" :class="isSidebarVisible ? 'h-16' : 'h-10'" alt="Logo" />
+        <img src="../assets/imgs/logo.png" alt="Logo" />
       </router-link>
       <span v-if="isSidebarVisible" class="text-2xl font-bold text-black-700">AGROTECH</span>
     </div>

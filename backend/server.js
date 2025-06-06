@@ -18,8 +18,9 @@ mongoose.connect(process.env.DATABASE_URL, {
 })
 .then(() => {
   console.log('✅ MongoDB conectado');
-  app.listen(8080, () => {
-    console.log('🚀 Servidor rodando na porta 8080');
+  const PORT = process.env.PORT || 8090;
+  app.listen(PORT, () => {
+    console.log(`🚀 Servidor rodando na porta ${PORT}`);
   });
 })
 .catch((err) => console.error('❌ Erro ao conectar no MongoDB:', err));
