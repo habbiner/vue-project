@@ -60,7 +60,7 @@
 
                     <div class="bg-white p-4 rounded-lg shadow-md w-[20%] h-[300px] mt-6 ml-8">
                         <h2 class="text-lg font-bold mb-4 text-cinzaEscuro text-center">Alertas</h2>
-                        <div class="flex items-center gap-4 bg-CinzaFB p-1 rounded-lg border-2 shadow-sm mb-2">
+                        <div v-if="alertaTemperaturaAlta" class="flex items-center gap-4 bg-CinzaFB p-1 rounded-lg border-2 shadow-sm mb-2">
                             <div class="text-red-500 text-2xl">
                                 <img src="../assets/imgs/Error.svg" alt="Ícone erro" class="w-8 h-8" />
                             </div>
@@ -68,9 +68,14 @@
                                 <p class="text-sm font-semibold text-cinzaMaisEscuro">Temperatura Alta</p>
                                 <p class="text-sm text-cinzaEscuro font-semibold">A75</p>
                                 <div class="flex">
-                                    <p class="text-sm text-cinzaEscuro font-semibold">35.2 °C</p>
-                                    <p class="text-xs text-cinzaEscuro ml-12 mt-1 font-semibold">07 de Abril 2025</p>
+                                    <p class="text-sm text-cinzaEscuro font-semibold">{{ alertaTemperaturaValor }} °C</p>
+                                    <p class="text-xs text-cinzaEscuro ml-12 mt-1 font-semibold">{{ alertaTemperaturaData }}</p>
                                 </div>
+                            </div>
+                        </div>
+                        <div v-else class="flex items-center gap-4 bg-CinzaFB p-1 rounded-lg border-2 shadow-sm mb-2">
+                            <div>
+                                <p class="text-sm text-cinzaMaisEscuro">Nenhum alerta de temperatura</p>
                             </div>
                         </div>
                     </div>
@@ -93,18 +98,22 @@
                             :series="barSeries" />
                     </div>
                     <button
-                        class="w-[25%] h-20 relatorios-btn mt-6 rounded-xl ml-[10em] flex items-center justify-center text-base font-bold transition">
+                        class="w-[25%] h-20 relatorios-btn mt-6 rounded-xl ml-[10em] flex items-center justify-center text-base font-bold transition"
+                        @click="mostrarModalRelatorio = true"
+                    >
                         RELATÓRIOS
                     </button>
                 </div>
             </div>
         </div>
     </div>
+
+    
 </template>
 
 <script setup>
 import axios from 'axios';
-import { ref, onMounted, reactive } from "vue";
+import { ref, onMounted, reactive, watch } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 import TheSidebar from "@/components/TheSidebar.vue";
 
@@ -123,6 +132,10 @@ const climaMaxTemp = ref(0);
 const climaCondicao = ref("Carregando...");
 const climaUmidade = ref(0);
 const climaStatusUmidade = ref("Carregando...");
+
+const alertaTemperaturaAlta = ref(false);
+const alertaTemperaturaValor = ref(0);
+const alertaTemperaturaData = ref('');
 
 // Gráficos
 const series = ref([
@@ -185,6 +198,7 @@ const variacaoDiaria = ref(0);
 // 🔁 Chamada à API de clima
 onMounted(async () => {
     const apiKey = '065be3669c620443682469492fb31277';
+    /*
     try {
         const response = await axios.get(
             `https://api.openweathermap.org/data/2.5/weather?q=Franca&appid=${apiKey}&units=metric&lang=pt_br`
@@ -202,10 +216,20 @@ onMounted(async () => {
         } else {
             climaStatusUmidade.value = 'Inadequado';
         }
+
+        // Lógica do alerta de temperatura alta
+        if (climaTemperatura.value > 30) {
+            alertaTemperaturaAlta.value = true;
+            alertaTemperaturaValor.value = climaTemperatura.value;
+            const hoje = new Date();
+            alertaTemperaturaData.value = hoje.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+        } else {
+            alertaTemperaturaAlta.value = false;
+        }
     } catch (error) {
         console.error('Erro ao buscar dados do clima:', error);
     }
-
+    */
    
     try {
         const dadosResponse = await axios.get('http://localhost:8090/api/dados'); 
@@ -233,6 +257,26 @@ onMounted(async () => {
                 dataBR.getMonth() === ultimoDia.mes &&
                 dataBR.getFullYear() === ultimoDia.ano;
         });
+
+        // PEGAR O ÚLTIMO REGISTRO DO BANCO PARA OS CARDS SUPERIORES
+        let ultimoRegistro = null;
+        if (dadosUltimoDia.length > 0) {
+            ultimoRegistro = dadosUltimoDia[0]; // Supondo que o mais recente está no início
+        } else if (todosDados.length > 0) {
+            ultimoRegistro = todosDados[0];
+        }
+        if (ultimoRegistro) {
+            climaTemperatura.value = Math.round(ultimoRegistro.temperature);
+            climaMinTemp.value = Math.round(ultimoRegistro.minTemperature ?? ultimoRegistro.temperature);
+            climaMaxTemp.value = Math.round(ultimoRegistro.maxTemperature ?? ultimoRegistro.temperature);
+            climaCondicao.value = ultimoRegistro.weatherDescription ?? '---';
+            climaUmidade.value = Math.round(ultimoRegistro.humidity);
+            if (climaUmidade.value >= 30 && climaUmidade.value <= 60) {
+                climaStatusUmidade.value = 'Adequado';
+            } else {
+                climaStatusUmidade.value = 'Inadequado';
+            }
+        }
 
         // 1. Defina os horários desejados (em formato de string "HH:mm")
         const horariosDesejados = [
@@ -325,5 +369,14 @@ onMounted(async () => {
     background-color: #fff;
     color: #22c55e;
     border: 2px solid #22c55e;
+}
+
+/* Modal customizado */
+.fixed.inset-0 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.4);
+    z-index: 50;
 }
 </style>
