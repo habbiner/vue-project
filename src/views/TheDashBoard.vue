@@ -8,7 +8,7 @@
                 <div class="flex gap-8 justify-center">
 
                     <!-- Card de Temperatura -->
-                    <div class="bg-white p-3 rounded-lg shadow-md w-[15.54vw]">
+                    <div class="bg-white p-3 rounded-lg shadow-md w-[15.54vw] card-dashboard">
                         <div class="flex items-center gap-3">
                             <div class="text-yellow-500 text-3xl">
                                 <h2 class="text-base font-semibold text-cinzaMaisEscuro">Temperatura</h2>
@@ -16,29 +16,28 @@
                                     <img src="@/assets/imgs/image 61.svg" alt="Ícone do clima" class="w-10 h-10" />
                                     <p class="text-3xl font-semibold text-cinzaEscuro ml-2">{{ climaTemperatura }}°C</p>
                                 </div>
-                            </div>
-                            <div>
-                                <p class="text-xs text-cinzaEscuro mt-1 ml-4">{{ climaMinTemp }}/{{ climaMaxTemp }}° | {{ climaCondicao }}</p>
+                                <p class="text-xs text-cinzaEscuro mt-1 ml-1">Mín: {{ climaMinTemp }}°C | Máx: {{ climaMaxTemp }}°C</p>
+                                
                             </div>
                         </div>
                     </div>
 
                     <!-- Card Umidade -->
-                    <div class="bg-white p-3 rounded-lg shadow-md w-[15.54vw]">
+                    <div class="bg-white p-3 rounded-lg shadow-md w-[15.54vw] card-dashboard">
                         <div class="flex items-center gap-3">
                             <div>
                                 <h2 class="text-base font-semibold text-cinzaMaisEscuro">Umidade</h2>
                                 <div class="flex items-center">
                                     <img src="../assets/imgs/Umidade.svg" alt="Ícone umidade" class="w-8 h-8 mt-1" />
                                     <p class="text-3xl font-semibold text-cinzaEscuro ml-2 ">{{ climaUmidade }}%</p>
-                                    <p class="text-xs -mt-4 ml-2">{{ climaStatusUmidade }}</p>
                                 </div>
+                                <p class="text-xs text-cinzaEscuro ml-1 mt-1">Status: {{ climaStatusUmidade }}</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Card Sensores -->
-                    <div class="bg-white p-3 rounded-lg shadow-md w-[15.54vw]">
+                    <div class="bg-white p-3 rounded-lg shadow-md w-[15.54vw] card-dashboard">
                         <div class="flex items-center gap-3">
                             <div>
                                 <h2 class="text-base font-semibold text-cinzaMaisEscuro">Sensores</h2>
@@ -81,7 +80,7 @@
                     </div>
 
                     <!-- Médias -->
-                    <div class="bg-white p-4 rounded-lg shadow-md w-[18%] h-[300px] mt-6 ml-8">
+                    <div class="bg-white p-4 rounded-lg shadow-md w-[18%] h-[300px] mt-6 ml-8 card-dashboard" @click="mostrarModalMedia = true">
                         <h2 class="text-lg font-bold mb-4 text-cinzaEscuro text-center">Médias Diarias</h2>
                         <p class="text-sm text-cinzaEscuro font-semibold mt-8">Variação Diaria: {{ variacaoDiaria }}°C</p>
                         <p class="text-sm text-cinzaEscuro font-semibold mt-8">Maxima Registrada: {{ maximaRegistrada }}°C</p>
@@ -107,15 +106,23 @@
             </div>
         </div>
     </div>
+    <MediaModal :visible="mostrarModalMedia" @close="mostrarModalMedia = false" :medias="mediasUltimosDias">
+        <p>Variação Diaria: {{ variacaoDiaria }}°C</p>
+        <p>Maxima Registrada: {{ maximaRegistrada }}°C</p>
+        <p>Minima Registrada: {{ minimaRegistrada }}°C</p>
+        <p>Média Diaria: {{ mediaDiaria }}°C</p>
+    </MediaModal>
 
     
 </template>
 
 <script setup>
+
 import axios from 'axios';
 import { ref, onMounted, reactive, watch } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 import TheSidebar from "@/components/TheSidebar.vue";
+import MediaModal from '@/components/MediaModal.vue'
 
 const temperaturaBanco = ref(0);
 const umidadeBanco = ref(0);
@@ -133,10 +140,12 @@ const climaCondicao = ref("Carregando...");
 const climaUmidade = ref(0);
 const climaStatusUmidade = ref("Carregando...");
 
+const mostrarModalMedia = ref(false)
+const mediasUltimosDias = ref([])
+
 const alertaTemperaturaAlta = ref(false);
 const alertaTemperaturaValor = ref(0);
 const alertaTemperaturaData = ref('');
-
 // Gráficos
 const series = ref([
     {
@@ -198,7 +207,7 @@ const variacaoDiaria = ref(0);
 // 🔁 Chamada à API de clima
 onMounted(async () => {
     const apiKey = '065be3669c620443682469492fb31277';
-    /*
+    
     try {
         const response = await axios.get(
             `https://api.openweathermap.org/data/2.5/weather?q=Franca&appid=${apiKey}&units=metric&lang=pt_br`
@@ -229,12 +238,24 @@ onMounted(async () => {
     } catch (error) {
         console.error('Erro ao buscar dados do clima:', error);
     }
-    */
    
     try {
         const dadosResponse = await axios.get('http://localhost:8090/api/dados'); 
         const todosDados = dadosResponse.data;
-
+        // Agrupar por dia e calcular média diária
+        const mediasPorDia = {};
+        todosDados.forEach(item => {
+            const data = new Date(item.datetime)
+            const chave = data.getFullYear() + '-' + (data.getMonth()+1).toString().padStart(2,'0') + '-' + data.getDate().toString().padStart(2,'0')
+            if (!mediasPorDia[chave]) mediasPorDia[chave] = []
+            if (typeof item.temperature === 'number') mediasPorDia[chave].push(item.temperature)
+        })
+        // Ordenar por data decrescente e pegar as últimas 7 médias
+        const chavesOrdenadas = Object.keys(mediasPorDia).sort((a,b)=>new Date(b)-new Date(a))
+        mediasUltimosDias.value = chavesOrdenadas.slice(0,7).reverse().map(chave => {
+            const arr = mediasPorDia[chave]
+            return arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0
+        })
         // Descobre o último dia disponível nos dados
         let ultimoDia = null;
         if (todosDados.length > 0) {
@@ -259,24 +280,7 @@ onMounted(async () => {
         });
 
         // PEGAR O ÚLTIMO REGISTRO DO BANCO PARA OS CARDS SUPERIORES
-        let ultimoRegistro = null;
-        if (dadosUltimoDia.length > 0) {
-            ultimoRegistro = dadosUltimoDia[0]; // Supondo que o mais recente está no início
-        } else if (todosDados.length > 0) {
-            ultimoRegistro = todosDados[0];
-        }
-        if (ultimoRegistro) {
-            climaTemperatura.value = Math.round(ultimoRegistro.temperature);
-            climaMinTemp.value = Math.round(ultimoRegistro.minTemperature ?? ultimoRegistro.temperature);
-            climaMaxTemp.value = Math.round(ultimoRegistro.maxTemperature ?? ultimoRegistro.temperature);
-            climaCondicao.value = ultimoRegistro.weatherDescription ?? '---';
-            climaUmidade.value = Math.round(ultimoRegistro.humidity);
-            if (climaUmidade.value >= 30 && climaUmidade.value <= 60) {
-                climaStatusUmidade.value = 'Adequado';
-            } else {
-                climaStatusUmidade.value = 'Inadequado';
-            }
-        }
+        // Removido: qualquer sobrescrita de climaTemperatura, climaMinTemp, climaMaxTemp, climaCondicao, climaUmidade, climaStatusUmidade
 
         // 1. Defina os horários desejados (em formato de string "HH:mm")
         const horariosDesejados = [
@@ -364,6 +368,16 @@ onMounted(async () => {
     background-color: #22c55e; /* verde padrão */
     color: #000;
     transition: background 0.3s, color 0.3s;
+}
+/* Efeito de profundidade nos cards superiores */
+.card-dashboard {
+    transition: box-shadow 0.25s cubic-bezier(0.4,0,0.2,1), transform 0.25s cubic-bezier(0.4,0,0.2,1);
+    cursor: pointer;
+}
+.card-dashboard:hover {
+    box-shadow: 0 4px 16px 0 rgba(7, 39, 19, 0.18), 0 px 4px 0 rgba(0,0,0,0.10);
+    transform: translateY(-4px) scale(1.04);
+    z-index: 2;
 }
 .relatorios-btn:hover {
     background-color: #fff;
