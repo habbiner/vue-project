@@ -20,14 +20,14 @@
         'justify-center px-2 py-2': !isSidebarVisible,
         'justify-start px-2 py-2': isSidebarVisible
       }">
-        <i class="fa fa-home fa-lg"></i>
+        
         <span v-if="isSidebarVisible" class="ml-2">Home</span>
       </RouterLink>
       <RouterLink to="/animais" class="flex items-center text-gray-700 hover:text-green-700 w-full px-4 py-2" :class="{
         'justify-center px-2 py-2': !isSidebarVisible,
         'justify-start px-2 py-2': isSidebarVisible
       }">
-        <img src="../assets/imgs/Vaquinha.svg" />
+        
         <span v-if="isSidebarVisible" class="ml-2">Animais</span>
       </RouterLink>
       <RouterLink to="/animais-card" class="flex items-center text-gray-700 hover:text-green-700 w-full px-4 py-2" :class="{
@@ -62,7 +62,7 @@
         'justify-center px-2 py-2': !isSidebarVisible,
         'justify-start px-2 py-2': isSidebarVisible
       }">
-        <img src="../assets/imgs/bardin.svg" />
+        
         <span v-if="isSidebarVisible" class="ml-2">Animal</span>
       </RouterLink>
     </div>
