@@ -1,4 +1,3 @@
-// swagger.js
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
@@ -14,12 +13,16 @@ const swaggerDefinition = {
       url: 'http://localhost:8090/api',
       description: 'Servidor local',
     },
+    {
+      url: 'https://backapp-9zet.onrender.com/api',
+      description: 'Servidor em produção (Render)',
+    },
   ],
 };
 
 const options = {
   swaggerDefinition,
-  apis: ['./routes/*.js'], // Pega as anotações no dataRoutes.js
+  apis: ['./routes/*.js'], // ou ajuste conforme a localização do dataRoutes.js
 };
 
 const swaggerSpec = swaggerJsdoc(options);
