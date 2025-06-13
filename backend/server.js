@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const dataRoutes = require('./routes/dataRoutes');
+const swaggerDocs = require('../backend/swagger');
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/api', dataRoutes);
+swaggerDocs(app);
 
 mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
