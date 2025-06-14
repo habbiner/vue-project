@@ -16,8 +16,9 @@
                                     <img src="@/assets/imgs/image 61.svg" alt="Ícone do clima" class="w-10 h-10" />
                                     <p class="text-3xl font-semibold text-cinzaEscuro ml-2">{{ climaTemperatura }}°C</p>
                                 </div>
-                                <p class="text-xs text-cinzaEscuro mt-1 ml-1">Mín: {{ minimaRegistrada }}°C | Máx: {{ maximaRegistrada }}°C</p>
-                                
+                                <p class="text-xs text-cinzaEscuro mt-1 ml-1">Mín: {{ minimaRegistrada }}°C | Máx: {{
+                                    maximaRegistrada }}°C</p>
+
                             </div>
                         </div>
                     </div>
@@ -37,16 +38,19 @@
                     </div>
 
                     <!-- Card Sensores -->
-                    <div class="bg-white p-3 rounded-lg shadow-md w-[15.54vw] card-dashboard" @click="mostrarModalSensores = true">
+                    <div class="bg-white p-3 rounded-lg shadow-md w-[15.54vw] card-dashboard"
+                        @click="mostrarModalSensores = true">
                         <div class="flex items-center gap-3">
                             <div>
                                 <h2 class="text-base font-semibold text-cinzaMaisEscuro">Sensores</h2>
                                 <div class="flex flex-col">
                                     <div class="flex items-center">
                                         <img src="../assets/imgs/Sensor.svg" alt="Ícone sensor" class="w-10 h-10" />
-                                        <span class="ml-2 text-base font-semibold text-cinzaEscuro">{{ sensorSelecionado }}</span>
+                                        <span class="ml-2 text-base font-semibold text-cinzaEscuro">{{ sensorSelecionado
+                                            }}</span>
                                     </div>
-                                    <span class="text-xs text-cinzaEscuro ml-1 mt-1">{{ sensorNomeParaLocal[sensorSelecionado] }}</span>
+                                    <span class="text-xs text-cinzaEscuro ml-1 mt-1">{{
+                                        sensorNomeParaLocal[sensorSelecionado] }}</span>
                                 </div>
                             </div>
                         </div>
@@ -63,7 +67,8 @@
 
                     <div class="bg-white p-4 rounded-lg shadow-md w-[20%] h-[300px] mt-6 ml-8 card-dashboard">
                         <h2 class="text-lg font-bold mb-4 text-cinzaEscuro text-center">Alertas</h2>
-                        <div v-if="alertaTemperaturaAlta" class="flex items-center gap-4 bg-CinzaFB p-1 rounded-lg border-2 shadow-sm mb-2">
+                        <div v-if="alertaTemperaturaAlta"
+                            class="flex items-center gap-4 bg-CinzaFB p-1 rounded-lg border-2 shadow-sm mb-2">
                             <div class="text-red-500 text-2xl">
                                 <img src="../assets/imgs/Error.svg" alt="Ícone erro" class="w-8 h-8" />
                             </div>
@@ -71,8 +76,10 @@
                                 <p class="text-sm font-semibold text-cinzaMaisEscuro">Temperatura Alta</p>
                                 <p class="text-sm text-cinzaEscuro font-semibold">A75</p>
                                 <div class="flex">
-                                    <p class="text-sm text-cinzaEscuro font-semibold">{{ alertaTemperaturaValor }} °C</p>
-                                    <p class="text-xs text-cinzaEscuro ml-12 mt-1 font-semibold">{{ alertaTemperaturaData }}</p>
+                                    <p class="text-sm text-cinzaEscuro font-semibold">{{ alertaTemperaturaValor }} °C
+                                    </p>
+                                    <p class="text-xs text-cinzaEscuro ml-12 mt-1 font-semibold">{{
+                                        alertaTemperaturaData }}</p>
                                 </div>
                             </div>
                         </div>
@@ -84,18 +91,21 @@
                     </div>
 
                     <!-- Médias -->
-                    <div class="bg-white p-4 rounded-lg shadow-md w-[18%] h-[300px] mt-6 ml-8 card-dashboard" @click="mostrarModalMedia = true">
+                    <div class="bg-white p-4 rounded-lg shadow-md w-[18%] h-[300px] mt-6 ml-8 card-dashboard"
+                        @click="mostrarModalMedia = true">
                         <h2 class="text-lg font-bold mb-4 text-cinzaEscuro text-center">Médias Diarias</h2>
                         <p class="text-sm text-cinzaEscuro font-semibold mt-8">Média Diaria: {{ mediaDiaria }}°C</p>
                         <p class="text-sm text-cinzaEscuro font-semibold mt-8">Moda: {{ moda }}°C</p>
                         <p class="text-sm text-cinzaEscuro font-semibold mt-8">Mediana: {{ mediana }}°C</p>
-                        <p class="text-sm text-cinzaEscuro font-semibold mt-8">Variação Diaria: {{ variacaoDiaria }}°C</p>
+                        <p class="text-sm text-cinzaEscuro font-semibold mt-8">Variação Diaria: {{ variacaoDiaria }}°C
+                        </p>
                     </div>
                 </div>
 
                 <!-- Gráfico Umidade -->
                 <div class="flex bg-blue items-center">
-                    <div class="bg-white ml-[6.5em] p-4 rounded-lg shadow-md mt-6 w-full max-w-[41.66vw] card-dashboard">
+                    <div
+                        class="bg-white ml-[6.5em] p-4 rounded-lg shadow-md mt-6 w-full max-w-[41.66vw] card-dashboard">
                         <h2 class="text-lg font-bold -mb-2 text-cinzaEscuro">Umidade</h2>
                         <VueApexCharts width="100%" height="150" type="bar" :options="barChartOptions"
                             :series="barSeries" />
@@ -103,8 +113,7 @@
                     <div class="w-[25%] ml-[10em]">
                         <button
                             class="w-full h-20 bg-[#22c55e] card-dashboard relatorios-btn mt-6 rounded-lg shadow-md flex items-center justify-center text-base font-bold text-white"
-                            @click="mostrarModalRelatorio = true"
-                        >
+                            @click="mostrarModalRelatorio = true">
                             <div class="flex items-center gap-2">
                                 <span>RELATÓRIOS</span>
                             </div>
@@ -114,17 +123,11 @@
             </div>
         </div>
     </div>
-    <MediaModal 
-        :visible="mostrarModalMedia" 
-        @close="mostrarModalMedia = false" 
-        :medias="mediasUltimosDias"
-        :mediaDiaria="mediaDiaria"
-        :moda="moda"
-        :mediana="mediana"
-        :assimetria="assimetria"
-        :projecaoFutura="projecaoFutura"
-    />
-    <SensoresModal :visible="mostrarModalSensores" @close="mostrarModalSensores = false" @select="sensorSelecionado = $event" />
+    <MediaModal :visible="mostrarModalMedia" @close="mostrarModalMedia = false" :medias="mediasUltimosDias"
+        :mediaDiaria="mediaDiaria" :moda="moda" :mediana="mediana" :assimetria="assimetria"
+        :projecaoFutura="projecaoFutura" />
+    <SensoresModal :visible="mostrarModalSensores" @close="mostrarModalSensores = false"
+        @select="sensorSelecionado = $event" />
 </template>
 
 <script setup>
@@ -165,9 +168,9 @@ const mediasUltimosDias = ref([])
 
 // Mapeamento de nomes dos sensores para locais
 const sensorNomeParaLocal = {
-  'Sensor 1 - Galpão Sul': 'Galpão Sul - Lote 15',
-  'Sensor 2 - Galpão Sudeste': 'Galpão Sudeste - Lote 68',
-  'Sensor 3 - Galpão Norte': 'Galpão Base - Lote 02',
+    'Sensor 1 - Galpão Sul': 'Galpão Sul - Lote 15',
+    'Sensor 2 - Galpão Sudeste': 'Galpão Sudeste - Lote 68',
+    'Sensor 3 - Galpão Norte': 'Galpão Base - Lote 02',
 }
 
 // Controle do modal de sensores e seleção atual
@@ -254,17 +257,17 @@ function calcularModa(array) {
         acc[val] = (acc[val] || 0) + 1;
         return acc;
     }, {});
-    
+
     let maxFrequencia = 0;
     let modaValor = null;
-    
+
     for (const [valor, frequencia] of Object.entries(frequencias)) {
         if (frequencia > maxFrequencia) {
             maxFrequencia = frequencia;
             modaValor = Number(valor);
         }
     }
-    
+
     return modaValor;
 }
 
@@ -272,11 +275,11 @@ function calcularMediana(array) {
     // Calcula a mediana (valor central) do conjunto de dados
     const ordenado = [...array].sort((a, b) => a - b);
     const meio = Math.floor(ordenado.length / 2);
-    
+
     if (ordenado.length % 2 === 0) {
         return (ordenado[meio - 1] + ordenado[meio]) / 2;
     }
-    
+
     return ordenado[meio];
 }
 
@@ -284,10 +287,10 @@ function calcularAssimetria(array) {
     // Calcula a assimetria (skewness) da distribuição dos dados
     const n = array.length;
     if (n < 3) return 0;
-    
+
     const media = array.reduce((a, b) => a + b) / n;
     const desvioPadrao = Math.sqrt(array.reduce((acc, val) => acc + Math.pow(val - media, 2), 0) / n);
-    
+
     const momento3 = array.reduce((acc, val) => acc + Math.pow(val - media, 3), 0) / n;
     return momento3 / Math.pow(desvioPadrao, 3);
 }
@@ -296,18 +299,18 @@ function calcularRegressaoLinear(dados) {
     // Calcula os coeficientes da regressão linear para projeção futura
     const n = dados.length;
     if (n < 2) return { a: 0, b: 0 };
-    
+
     const x = Array.from({ length: n }, (_, i) => i);
     const y = dados;
-    
+
     const somaX = x.reduce((a, b) => a + b, 0);
     const somaY = y.reduce((a, b) => a + b, 0);
     const somaXY = x.reduce((acc, xi, i) => acc + xi * y[i], 0);
     const somaX2 = x.reduce((acc, xi) => acc + xi * xi, 0);
-    
+
     const a = (n * somaXY - somaX * somaY) / (n * somaX2 - somaX * somaX);
     const b = (somaY - a * somaX) / n;
-    
+
     return { a, b };
 }
 
@@ -337,16 +340,16 @@ function atualizarGraficosEMedias() {
     const mediasPorDia = {};
     dadosSensor.forEach(item => {
         const data = new Date(item.datetime)
-        const chave = data.getFullYear() + '-' + (data.getMonth()+1).toString().padStart(2,'0') + '-' + data.getDate().toString().padStart(2,'0')
+        const chave = data.getFullYear() + '-' + (data.getMonth() + 1).toString().padStart(2, '0') + '-' + data.getDate().toString().padStart(2, '0')
         if (!mediasPorDia[chave]) mediasPorDia[chave] = []
         if (typeof item.temperature === 'number') mediasPorDia[chave].push(item.temperature)
     })
 
     // Calcula médias dos últimos 7 dias
-    const chavesOrdenadas = Object.keys(mediasPorDia).sort((a,b)=>new Date(b)-new Date(a))
-    mediasUltimosDias.value = chavesOrdenadas.slice(0,7).reverse().map(chave => {
+    const chavesOrdenadas = Object.keys(mediasPorDia).sort((a, b) => new Date(b) - new Date(a))
+    mediasUltimosDias.value = chavesOrdenadas.slice(0, 7).reverse().map(chave => {
         const arr = mediasPorDia[chave]
-        return arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0
+        return arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0
     })
 
     // Processa dados do último dia para os gráficos
@@ -406,7 +409,7 @@ function atualizarGraficosEMedias() {
 
     // Processa os dados para os gráficos
     const listaDisponivel = [...dadosUltimoDia];
-    const dadosFiltrados = horariosDesejados.map(horario => 
+    const dadosFiltrados = horariosDesejados.map(horario =>
         encontrarMaisProximoSemRepetir(horario, listaDisponivel)
     );
 
@@ -441,11 +444,11 @@ function atualizarGraficosEMedias() {
         minimaRegistrada.value = Math.round(Math.min(...tempValidasDia));
         mediaDiaria.value = Math.round(tempValidasDia.reduce((acc, val) => acc + val, 0) / tempValidasDia.length);
         variacaoDiaria.value = Math.round(Math.max(...tempValidasDia) - Math.min(...tempValidasDia));
-        
+
         moda.value = Math.round(calcularModa(tempValidasDia) * 10) / 10;
         mediana.value = Math.round(calcularMediana(tempValidasDia) * 10) / 10;
         assimetria.value = Math.round(calcularAssimetria(tempValidasDia) * 100) / 100;
-        
+
         // Calcula projeções futuras usando regressão linear
         const { a, b } = calcularRegressaoLinear(tempValidasDia);
         projecaoFutura.value = Array.from({ length: 5 }, (_, i) => {
@@ -497,13 +500,13 @@ onMounted(async () => {
     } catch (error) {
         console.error('Erro ao buscar dados do clima:', error);
     }
-   
+
     await carregarDados();
 });
 
 async function carregarDados() {
     try {
-        const dadosResponse = await axios.get('http://localhost:8090/api/dados');
+        const dadosResponse = await axios.get('https://backapp-9zet.onrender.com/api/dados');
         todosDados = dadosResponse.data;
         atualizarGraficosEMedias();
     } catch (error) {
@@ -526,7 +529,7 @@ watch(sensorSelecionado, () => {
 
 /* Efeito de profundidade nos cards e botão */
 .card-dashboard {
-    transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     border: 2px solid transparent;
 }
@@ -539,7 +542,7 @@ watch(sensorSelecionado, () => {
 
 /* Estilo específico para o botão de relatórios */
 .relatorios-btn {
-    transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .relatorios-btn:hover {
@@ -557,7 +560,7 @@ watch(sensorSelecionado, () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0, 0, 0, 0.4);
     z-index: 50;
 }
 </style>
