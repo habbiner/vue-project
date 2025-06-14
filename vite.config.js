@@ -20,6 +20,6 @@ export default defineConfig({
   preview: {
     port: process.env.PORT || 4173,
     host: true,
-    allowedHosts: ['vue-project-front.onrender.com'], // 👈 adiciona isso
+    allowedHosts: ['frontapp-nsrs.onrender.com', 'localhost'],
   }
 })
